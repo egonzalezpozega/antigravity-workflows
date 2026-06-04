@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Conference Event Tracker{% endblock %}</title>
+    
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS Variables & Styling System -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Premium Header and Navigation -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <a href="{{ url_for('index') }}" class="brand">
+                <span class="brand-icon">✦</span>
+                <span class="brand-text">Cosmic<span class="highlight">Events</span></span>
+            </a>
+            <nav class="nav-links">
+                <a href="{{ url_for('index') }}" class="nav-link {% if request.path == '/' %}active{% endif %}">
+                    Dashboard
+                </a>
+                <a href="{{ url_for('add_event') }}" class="btn-glowing">
+                    <span>+ Add Session</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-container">
+        <!-- Securely Flash Notification Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages" id="flash-container">
+                    {% for category, message in messages %}
+                        <div class="flash-alert alert-{{ category }}" role="alert">
+                            <span class="alert-symbol">
+                                {% if category == 'success' %}✓{% else %}⚠{% endif %}
+                            </span>
+                            <span class="alert-content">{{ message }}</span>
+                            <button class="alert-close-btn" onclick="closeAlert(this)">&times;</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Content Block -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 CosmicEvents Platform. Engineered with ultimate security & design.</p>
+    </footer>
+
+    <!-- Main Vanilla JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

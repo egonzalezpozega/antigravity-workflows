@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - CosmicEvents Tracker{% endblock %}
+
+{% block content %}
+<!-- Hero Welcome Section -->
+<section class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">Welcome to the Future of <span class="text-glow">Conference tracking</span></h1>
+        <p class="hero-subtitle">Seamlessly view, search, and manage world-class technical sessions at your fingertips.</p>
+    </div>
+</section>
+
+<!-- Interactive KPI Metrics -->
+<section class="metrics-grid">
+    <div class="glass-card metric-card">
+        <div class="metric-icon">📁</div>
+        <div class="metric-info">
+            <span class="metric-value" id="stat-total">{{ total_events }}</span>
+            <span class="metric-label">Total Sessions</span>
+        </div>
+    </div>
+    <div class="glass-card metric-card">
+        <div class="metric-icon">📅</div>
+        <div class="metric-info">
+            <span class="metric-value" id="stat-upcoming">{{ upcoming_count }}</span>
+            <span class="metric-label">Upcoming Events</span>
+        </div>
+    </div>
+    <div class="glass-card metric-card">
+        <div class="metric-icon">🏷</div>
+        <div class="metric-info">
+            <span class="metric-value" id="stat-categories">{{ categories|length }}</span>
+            <span class="metric-label">Tracks & Fields</span>
+        </div>
+    </div>
+</section>
+
+<!-- Live Control Panel -->
+<section class="control-panel glass-card">
+    <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="event-search" placeholder="Search by title, speaker, or keyword..." autocomplete="off">
+    </div>
+    <div class="filter-group">
+        <span class="filter-label">Filter Track:</span>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-category="all">All Tracks</button>
+            {% for category in categories %}
+                <button class="filter-btn" data-category="{{ category }}">{{ category }}</button>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Timeline and Event List -->
+<section class="events-timeline">
+    <div class="timeline-header">
+        <h2 class="section-title">Conference Timeline & Sessions</h2>
+        <span class="timeline-status" id="filtered-count-badge">Showing all {{ total_events }} sessions</span>
+    </div>
+    
+    <div class="events-grid" id="events-container">
+        {% for event in events %}
+            <!-- Event Card component -->
+            <article class="glass-card event-card" 
+                     data-category="{{ event.category }}" 
+                     data-search-text="{{ event.title.lower() }} {{ event.speaker.lower() }} {{ event.description.lower() }} {{ event.location.lower() }}">
+                
+                <div class="card-glow"></div>
+                
+                <!-- Category and Timing -->
+                <div class="card-header">
+                    <span class="category-badge" data-cat="{{ event.category }}">{{ event.category }}</span>
+                    <div class="event-time-badge">
+                        <span class="date-icon">📅</span>
+                        <span>{{ event.event_date }}</span>
+                        <span class="time-sep">|</span>
+                        <span>{{ event.event_time }}</span>
+                    </div>
+                </div>
+                
+                <!-- Main Body info -->
+                <div class="card-body">
+                    <h3 class="event-card-title">{{ event.title }}</h3>
+                    <div class="speaker-row">
+                        <span class="speaker-avatar">✦</span>
+                        <span class="speaker-name">Presented by <strong class="speaker-highlight">{{ event.speaker }}</strong></span>
+                    </div>
+                    <p class="event-card-desc">{{ event.description }}</p>
+                </div>
+                
+                <!-- Footer and Location -->
+                <div class="card-footer">
+                    <div class="location-badge">
+                        <span class="loc-icon">📍</span>
+                        <span class="loc-text">{{ event.location }}</span>
+                    </div>
+                </div>
+            </article>
+        {% else %}
+            <!-- Empty state when no events exist in database -->
+            <div class="empty-state-card glass-card" id="no-events-fallback">
+                <div class="empty-portal">✦</div>
+                <h3>No Conference Sessions Registered</h3>
+                <p>Be the first to set the trajectory of our conference. Add a state-of-the-art session now!</p>
+                <a href="{{ url_for('add_event') }}" class="btn-glowing">
+                    <span>+ Register First Event</span>
+                </a>
+            </div>
+        {% endfor %}
+        
+        <!-- Live JS Search fallback -->
+        <div class="empty-state-card glass-card hidden" id="no-results-fallback">
+            <div class="empty-portal">🔍</div>
+            <h3>No Sessions Match Your Search</h3>
+            <p>Try adjusting your keyword filter or select another Track.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
