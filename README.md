@@ -323,6 +323,25 @@ cd conference-event-tracker
 ./venv/bin/python -m unittest discover -s .
 ```
 
+### Running the Application Locally
+
+To run the Single-Page Application (SPA) locally:
+
+1. Navigate to the project directory:
+   ```bash
+   cd conference-event-tracker
+   ```
+2. Activate the Python virtual environment:
+   ```bash
+   source venv/bin/activate
+   ```
+3. Start the Flask application:
+   ```bash
+   python app.py
+   ```
+4. Open your web browser and navigate to `http://127.0.0.1:5000` to access the premium interactive schedule dashboard.
+
+
 ### Security Configurations
 
 The application enforces standard security protocols:
