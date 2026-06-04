@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Register Session - CosmicEvents Tracker{% endblock %}
+
+{% block content %}
+<section class="form-wrapper">
+    <div class="glass-card form-container-card">
+        <!-- Section Header -->
+        <div class="form-header">
+            <h2 class="form-title">Register Conference Session</h2>
+            <p class="form-subtitle">Pitch a new high-quality session. All fields must comply with quality standards.</p>
+        </div>
+        
+        <!-- Interactive Form -->
+        <form action="{{ url_for('add_event') }}" method="POST" class="cosmic-form" id="session-registration-form">
+            <!-- CSRF Protection (Mandatory for Session Cookie based apps) -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <div class="form-grid">
+                <!-- Title Input -->
+                <div class="form-group span-full">
+                    <label for="title" class="form-label">Session Title</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">✦</span>
+                        <input type="text" id="title" name="title" required 
+                               placeholder="e.g. Scaling Quantum Neural Networks in Multi-tenant Clusters" 
+                               minlength="5" maxlength="100" autocomplete="off">
+                    </div>
+                    <span class="field-hint">A concise and compelling title (5-100 characters).</span>
+                </div>
+
+                <!-- Speaker Input -->
+                <div class="form-group">
+                    <label for="speaker" class="form-label">Key Presenter / Speaker</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="speaker" name="speaker" required 
+                               placeholder="e.g. Dr. Ada Lovelace" 
+                               minlength="2" maxlength="80" autocomplete="off">
+                    </div>
+                    <span class="field-hint">The primary session host (2-80 characters).</span>
+                </div>
+
+                <!-- Category Track Dropdown -->
+                <div class="form-group">
+                    <label for="category" class="form-label">Conference Track</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🏷</span>
+                        <select id="category" name="category" required>
+                            <option value="" disabled selected>-- Select conference track --</option>
+                            <option value="AI & Deep Learning">AI & Deep Learning</option>
+                            <option value="Cybersecurity">Cybersecurity</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="Cloud Native Systems">Cloud Native Systems</option>
+                            <option value="Quantum Computing">Quantum Computing</option>
+                            <option value="DevOps & Reliability">DevOps & Reliability</option>
+                        </select>
+                    </div>
+                    <span class="field-hint">Select the primary scientific category.</span>
+                </div>
+
+                <!-- Date Input -->
+                <div class="form-group">
+                    <label for="event_date" class="form-label">Event Date</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">📅</span>
+                        <input type="date" id="event_date" name="event_date" required>
+                    </div>
+                    <span class="field-hint">Conference schedule date.</span>
+                </div>
+
+                <!-- Time Input -->
+                <div class="form-group">
+                    <label for="event_time" class="form-label">Session Start Time</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🕒</span>
+                        <input type="time" id="event_time" name="event_time" required>
+                    </div>
+                    <span class="field-hint">Target starting local time.</span>
+                </div>
+
+                <!-- Location Input -->
+                <div class="form-group span-full">
+                    <label for="location" class="form-label">Presentation Location / Venue</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">📍</span>
+                        <input type="text" id="location" name="location" required 
+                               placeholder="e.g. Main Auditorium (Hall A) or Virtual Link Zoom/Meet" 
+                               minlength="3" maxlength="100" autocomplete="off">
+                    </div>
+                    <span class="field-hint">Stage, hall, physical room or virtual platform URI (3-100 characters).</span>
+                </div>
+
+                <!-- Description Text Area -->
+                <div class="form-group span-full">
+                    <label for="description" class="form-label">Session Abstract & Description</label>
+                    <div class="input-wrapper align-start">
+                        <span class="input-icon mt-10">✍</span>
+                        <textarea id="description" name="description" required 
+                                  placeholder="Describe the learning objectives, key takeaways, and necessary background knowledge for the attendees..." 
+                                  minlength="10" maxlength="1000" rows="5"></textarea>
+                    </div>
+                    <span class="field-hint">Include main topics (10-1000 characters).</span>
+                </div>
+            </div>
+            
+            <!-- Submission Actions -->
+            <div class="form-actions">
+                <a href="{{ url_for('index') }}" class="btn-cancel">
+                    Cancel
+                </a>
+                <button type="submit" class="btn-glowing">
+                    <span>Submit Session Proposal</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
