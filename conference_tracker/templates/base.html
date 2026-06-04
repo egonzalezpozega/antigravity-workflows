@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- SEO and Responsive Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A state-of-the-art Web Application designed to track upcoming conference events, sessions, workshops, and panels with a premium visual dashboard.">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Page Title -->
+    <title>{% block title %}Conference Event Tracker{% endblock %} | Aura Events</title>
+    
+    <!-- Favicon (Data URI fallback to prevent 404) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
+    
+    <!-- Link Core Premium Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    <!-- Flash Notification System -->
+    <div class="flash-messages" id="toast-container" aria-live="polite">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" role="alert">
+                        <span class="alert-text">{{ message }}</span>
+                        <button type="button" class="alert-close" onclick="this.parentElement.remove();" aria-label="Close Notification">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-content">
+            <a href="{{ url_for('index') }}" class="logo" id="nav-home-logo" aria-label="Aura Events Homepage">
+                <span class="logo-dot"></span>Aura Events
+            </a>
+            <nav class="nav-links">
+                <a href="{{ url_for('index') }}" class="btn btn-secondary" id="nav-view-events-btn">
+                    View Events
+                </a>
+                <a href="{{ url_for('add_event') }}" class="btn btn-primary" id="nav-add-event-btn">
+                    + Add Event
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="container" style="min-height: calc(100vh - 180px);">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer style="background-color: rgba(9, 10, 21, 0.9); padding: 2.5rem 0; border-top: var(--glass-border); text-align: center; font-size: 0.9rem; color: hsl(215, 20%, 65%);">
+        <div class="container">
+            <p id="footer-text">&copy; 2026 Aura Events Conference Hub. All rights reserved.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem; color: hsl(215, 20%, 45%);">Designed securely with Antigravity agentic frameworks.</p>
+        </div>
+    </footer>
+
+    <!-- Deferred Custom JS for interactive search & filtering -->
+    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>
