@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Add New Event{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <div class="form-header">
+        <h2>Register New Session</h2>
+        <p>Introduce a new event, workshop, keynote, or networking mixer to the Aura Events schedule.</p>
+    </div>
+
+    <!-- Event Creation Form (Enforces state-changing POST and includes custom CSRF token) -->
+    <form action="{{ url_for('add_event') }}" method="POST" id="add-event-form">
+        <!-- Secure CSRF Token Injection -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="form-grid">
+            
+            <!-- Event Title -->
+            <div class="form-group full-width">
+                <label for="event-title-input">Session Title *</label>
+                <input 
+                    type="text" 
+                    id="event-title-input" 
+                    name="title" 
+                    placeholder="e.g., Deep Dive into LLM Architecture" 
+                    value="{{ form_data.get('title', '') }}" 
+                    required 
+                    maxlength="150"
+                    autocomplete="off"
+                >
+            </div>
+
+            <!-- Speaker / Presenter -->
+            <div class="form-group">
+                <label for="event-speaker-input">Speaker / Presenter *</label>
+                <input 
+                    type="text" 
+                    id="event-speaker-input" 
+                    name="speaker" 
+                    placeholder="e.g., Dr. Alan Turing" 
+                    value="{{ form_data.get('speaker', '') }}" 
+                    required 
+                    maxlength="100"
+                >
+            </div>
+
+            <!-- Category -->
+            <div class="form-group">
+                <label for="event-category-select">Category *</label>
+                <select id="event-category-select" name="category" required>
+                    <option value="" disabled {% if not form_data.get('category') %}selected{% endif %}>Select session type...</option>
+                    <option value="Keynote" {% if form_data.get('category') == 'Keynote' %}selected{% endif %}>Keynote</option>
+                    <option value="Workshop" {% if form_data.get('category') == 'Workshop' %}selected{% endif %}>Workshop</option>
+                    <option value="Panel" {% if form_data.get('category') == 'Panel' %}selected{% endif %}>Panel</option>
+                    <option value="Networking" {% if form_data.get('category') == 'Networking' %}selected{% endif %}>Networking Mixer</option>
+                </select>
+            </div>
+
+            <!-- Date -->
+            <div class="form-group">
+                <label for="event-date-input">Event Date *</label>
+                <input 
+                    type="date" 
+                    id="event-date-input" 
+                    name="date" 
+                    value="{{ form_data.get('date', '') }}" 
+                    required
+                >
+            </div>
+
+            <!-- Time -->
+            <div class="form-group">
+                <label for="event-time-input">Start Time *</label>
+                <input 
+                    type="time" 
+                    id="event-time-input" 
+                    name="time" 
+                    value="{{ form_data.get('time', '') }}" 
+                    required
+                >
+            </div>
+
+            <!-- Location -->
+            <div class="form-group full-width">
+                <label for="event-location-input">Location / Venue *</label>
+                <input 
+                    type="text" 
+                    id="event-location-input" 
+                    name="location" 
+                    placeholder="e.g., Ballroom B, 3rd Floor or Virtual Link" 
+                    value="{{ form_data.get('location', '') }}" 
+                    required 
+                    maxlength="100"
+                >
+            </div>
+
+            <!-- Description -->
+            <div class="form-group full-width">
+                <label for="event-description-textarea">Detailed Description</label>
+                <textarea 
+                    id="event-description-textarea" 
+                    name="description" 
+                    placeholder="Provide a comprehensive summary of what attendees will learn, discuss, or experience during this event..." 
+                    maxlength="1000"
+                >{{ form_data.get('description', '') }}</textarea>
+                <span style="font-size: 0.75rem; color: hsl(215, 20%, 55%); align-self: flex-end; margin-top: 2px;">Max 1000 characters.</span>
+            </div>
+
+        </div>
+
+        <!-- Submission Actions -->
+        <div class="form-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary" id="form-cancel-btn">Cancel</a>
+            <button type="submit" class="btn btn-primary" id="form-submit-btn">Publish Event</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
