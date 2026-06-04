@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextGen Schedule - Premium Conference Event Tracker</title>
+    <meta name="description" content="Discover, filter, and track upcoming conference events. Stay up-to-date with tracks, speakers, and schedule details using our premium visual scheduler.">
+    <!-- Inline styles for fallback/loading state. Actual styles loaded via style.css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="dark-theme">
+    <!-- Header Section -->
+    <header class="app-header" id="app-header-container">
+        <div class="header-brand">
+            <div class="brand-logo" id="brand-logo-icon">✨</div>
+            <h1 id="app-main-heading">NextGen Schedule</h1>
+        </div>
+        <div class="header-actions">
+            <button id="theme-toggle-btn" class="icon-btn" aria-label="Toggle Theme">
+                <span class="theme-icon" id="theme-icon-indicator">☀️</span>
+            </button>
+            <button id="open-modal-btn" class="primary-btn">
+                <span class="btn-icon">+</span> Add Event
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-main" id="main-content-layout">
+        <!-- Control Panel Section (Search & Filter) -->
+        <section class="control-panel" id="control-panel-section" aria-label="Filter and search events">
+            <div class="search-bar-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="search" id="event-search-input" placeholder="Search events, speakers, rooms..." aria-label="Search events">
+            </div>
+            <div class="filter-group-container" id="filter-group-container">
+                <span class="filter-label">Filter Tracks:</span>
+                <div class="filters-list" id="categories-filter-list">
+                    <button class="filter-btn active" id="filter-all" data-category="all">All Events</button>
+                    <button class="filter-btn" id="filter-keynote" data-category="Keynote">Keynote</button>
+                    <button class="filter-btn" id="filter-tech-talk" data-category="Tech Talk">Tech Talk</button>
+                    <button class="filter-btn" id="filter-workshop" data-category="Workshop">Workshop</button>
+                    <button class="filter-btn" id="filter-panel" data-category="Panel">Panel</button>
+                    <button class="filter-btn" id="filter-favorites" data-category="Favorites">⭐ My Schedule</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Overview dashboard to make it premium -->
+        <section class="dashboard-stats" id="dashboard-stats-banner" aria-label="Dashboard statistics">
+            <div class="stat-card" id="stat-total-events">
+                <span class="stat-num" id="stat-val-total">0</span>
+                <span class="stat-label">Total Events</span>
+            </div>
+            <div class="stat-card" id="stat-total-workshops">
+                <span class="stat-num" id="stat-val-workshops">0</span>
+                <span class="stat-label">Workshops</span>
+            </div>
+            <div class="stat-card" id="stat-total-keynotes">
+                <span class="stat-num" id="stat-val-keynotes">0</span>
+                <span class="stat-label">Keynotes</span>
+            </div>
+            <div class="stat-card" id="stat-my-schedule">
+                <span class="stat-num" id="stat-val-starred">0</span>
+                <span class="stat-label">In My Schedule</span>
+            </div>
+        </section>
+
+        <!-- Events Container -->
+        <section class="events-section" id="events-grid-section" aria-label="List of events">
+            <div class="loader-spinner" id="events-loader">
+                <div class="spinner-circle"></div>
+                <p>Loading the ultimate schedule...</p>
+            </div>
+            
+            <div class="no-events-view hidden" id="no-events-view">
+                <div class="empty-state-icon">📅</div>
+                <h2>No Events Found</h2>
+                <p>Try refining your search or add a brand new event to the list!</p>
+            </div>
+
+            <div class="events-grid" id="events-grid-container">
+                <!-- Rendered dynamically via static/js/app.js -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer" id="app-footer-info">
+        <p>© 2026 NextGen Schedule. Crafted for developers & organizers.</p>
+    </footer>
+
+    <!-- Add Event Modal Dialog -->
+    <div class="modal-backdrop hidden" id="event-modal-backdrop">
+        <div class="modal-card" role="dialog" aria-labelledby="modal-title-heading" aria-modal="true">
+            <header class="modal-header">
+                <h2 id="modal-title-heading">Create Conference Event</h2>
+                <button class="close-modal-btn" id="close-modal-btn" aria-label="Close dialog">×</button>
+            </header>
+            
+            <form id="add-event-form" class="modal-form" novalidate>
+                <div id="form-error-banner" class="form-error-banner hidden" role="alert">
+                    <!-- Dynamic validation error messages -->
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-title-field">Event Title</label>
+                    <input type="text" id="event-title-field" name="title" required placeholder="e.g. NextGen API Design Guidelines" max="100">
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="event-speaker-field">Speaker</label>
+                        <input type="text" id="event-speaker-field" name="speaker" required placeholder="e.g. Dr. Jane Smith">
+                    </div>
+                    <div class="form-group">
+                        <label for="event-location-field">Location / Room</label>
+                        <input type="text" id="event-location-field" name="location" required placeholder="e.g. Grand Ballroom B">
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="event-category-field">Track/Category</label>
+                        <select id="event-category-field" name="category" required>
+                            <option value="" disabled selected>Select category</option>
+                            <option value="Keynote">Keynote</option>
+                            <option value="Tech Talk">Tech Talk</option>
+                            <option value="Workshop">Workshop</option>
+                            <option value="Panel">Panel</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="event-start-field">Start Time</label>
+                        <input type="datetime-local" id="event-start-field" name="start_time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-end-field">End Time</label>
+                        <input type="datetime-local" id="event-end-field" name="end_time" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="event-desc-field">Description</label>
+                    <textarea id="event-desc-field" name="description" rows="4" required placeholder="Describe what attendees will learn from this session..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="cancel-form-btn" class="secondary-btn">Cancel</button>
+                    <button type="submit" id="submit-form-btn" class="primary-btn">Save Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Core App Logic -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
